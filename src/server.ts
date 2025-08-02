@@ -1,12 +1,10 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
+import App from "./app";
+import { IndexRoute } from "./module/index";
 dotenv.config();
-const app = express();
-const port = process.env.SERVER_PORT || 3000;
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
-});
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
+const routes = [new IndexRoute()];
+const app = new App(routes);
+
+app.listen();
