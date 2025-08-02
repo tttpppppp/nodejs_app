@@ -1,0 +1,7 @@
+{
+  "name": "nodejstrain",
+  "version": "1.0.0",
+  "description": "nodejs_app",
+  "main": "src/server.ts",
+  "license": "MIT"
+}
