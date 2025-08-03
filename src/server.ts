@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import App from "./app";
-import { IndexRoute } from "./module/index";
-import { validEnv } from "./core/utils";
+import { IndexRoute } from "@modules/index";
+import { validEnv } from "@core/utils";
 
 dotenv.config();
 validEnv();

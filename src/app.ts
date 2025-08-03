@@ -4,7 +4,7 @@ import helmet from "helmet";
 import mongoose from "mongoose";
 import cors from "cors";
 import morgan from "morgan";
-import { Logger } from "./core/utils";
+import { Logger } from "@core/utils";
 class App {
   public app: express.Application;
   public port: string | number;
