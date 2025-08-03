@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import morgan from "morgan";
 import { Logger } from "@core/utils";
+import middleware from "./core/middleware/error.middeware";
 class App {
   public app: express.Application;
   public port: string | number;
@@ -38,6 +39,7 @@ class App {
       this.app.use(morgan("dev"));
     }
     this.app.use(cors(corsOptions));
+    this.app.use(middleware);
   }
 
   public listen() {
