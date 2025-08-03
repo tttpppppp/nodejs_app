@@ -1,3 +1,3 @@
 import Logger from "./logger";
-
-export { Logger };
+import validEnv from "./envalid";
+export { Logger, validEnv };
