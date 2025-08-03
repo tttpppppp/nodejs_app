@@ -1,15 +1,21 @@
 import { Routes } from "core/interface";
 import express from "express";
+import helmet from "helmet";
 import mongoose from "mongoose";
+import cors from "cors";
+import morgan from "morgan";
+import { Logger } from "./core/utils";
 class App {
   public app: express.Application;
   public port: string | number;
-
+  public production: boolean;
   constructor(routes: Routes[]) {
     this.app = express();
     this.port = process.env.SERVER_PORT || 3000;
     this.initializeRoutes(routes);
     this.connectToDatabase();
+    this.production = process.env.NODE_ENV === "production";
+    this.initializeMiddlewares();
   }
 
   private initializeRoutes(routes: Routes[]) {
@@ -17,25 +23,41 @@ class App {
       this.app.use(route.path, route.router);
     });
   }
+  private initializeMiddlewares() {
+    const corsOptions = {
+      origin: process.env.CORS_ORIGIN || "*",
+      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+      allowedHeaders: "Content-Type, Authorization",
+    };
+
+    if (this.production) {
+      this.app.use(helmet());
+      this.app.use(express.json());
+      this.app.use(morgan("combined"));
+    } else {
+      this.app.use(morgan("dev"));
+    }
+    this.app.use(cors(corsOptions));
+  }
 
   public listen() {
     this.app.listen(this.port, () => {
-      console.log(`App listening on the port ${this.port}`);
+      Logger.info(`App listening on the port ${this.port}`);
     });
   }
   private async connectToDatabase() {
     const dbUrl = process.env.DATABASE_URL;
     if (!dbUrl) {
-      console.error("DATABASE_URL is not defined.");
+      Logger.error("DATABASE_URL is not defined.");
       return;
     }
     try {
       await mongoose.connect(dbUrl, {
         dbName: "nodejs_app",
       });
-      console.log("Connected to the database successfully");
+      Logger.info("Connected to the database successfully");
     } catch (error) {
-      console.error("Database connection error:", error);
+      Logger.error("Database connection error:", error);
     }
   }
 }
