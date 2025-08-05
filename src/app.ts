@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import morgan from "morgan";
 import { Logger } from "@core/utils";
-import middleware from "./core/middleware/error.middeware";
+import errorMiddleware from "./core/middleware/error.middeware";
 class App {
   public app: express.Application;
   public port: string | number;
@@ -17,6 +17,7 @@ class App {
     this.production = process.env.NODE_ENV === "production";
     this.initializeMiddlewares();
     this.initializeRoutes(routes);
+    this.initializeErrorHandling();
   }
 
   private initializeRoutes(routes: Routes[]) {
@@ -39,7 +40,11 @@ class App {
     }
     this.app.use(cors(corsOptions));
     this.app.use(express.json());
-    this.app.use(middleware);
+    this.app.use(express.urlencoded({ extended: true }));
+  }
+
+  private initializeErrorHandling() {
+    this.app.use(errorMiddleware);
   }
 
   public listen() {

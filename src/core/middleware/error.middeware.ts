@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { Logger } from "../utils";
 import { HttpException } from "../exception";
 
-const middleware = (
+const errorMiddleware = (
   error: HttpException,
   req: Request,
   res: Response,
@@ -14,4 +14,4 @@ const middleware = (
   Logger.error(`Error: ${error.message}`);
 };
 
-export default middleware;
+export default errorMiddleware;

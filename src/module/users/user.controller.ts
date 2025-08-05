@@ -16,7 +16,6 @@ class UserController {
       return res.status(201).json({ message: "Create Successes!", token });
     } catch (error) {
       next(error);
-      return res.status(500).json({ message: "Internal Server Error" });
     }
   };
 }

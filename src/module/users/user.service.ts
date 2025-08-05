@@ -19,7 +19,7 @@ class UserService {
       email: userData.email,
     });
     if (findUser) {
-      throw new HttpException(500, "User already exists");
+      throw new HttpException(409, "User already exists");
     }
     var url = gravatar.url(userData.email, {
       s: "200",
