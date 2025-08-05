@@ -13,10 +13,10 @@ class App {
   constructor(routes: Routes[]) {
     this.app = express();
     this.port = process.env.SERVER_PORT || 3000;
-    this.initializeRoutes(routes);
     this.connectToDatabase();
     this.production = process.env.NODE_ENV === "production";
     this.initializeMiddlewares();
+    this.initializeRoutes(routes);
   }
 
   private initializeRoutes(routes: Routes[]) {
@@ -33,12 +33,12 @@ class App {
 
     if (this.production) {
       this.app.use(helmet());
-      this.app.use(express.json());
       this.app.use(morgan("combined"));
     } else {
       this.app.use(morgan("dev"));
     }
     this.app.use(cors(corsOptions));
+    this.app.use(express.json());
     this.app.use(middleware);
   }
 
@@ -58,6 +58,7 @@ class App {
         dbName: "nodejs_app",
       });
       Logger.info("Connected to the database successfully");
+      Logger.info(`Mongoose connected to: ${mongoose.connection.name}`);
     } catch (error) {
       Logger.error("Database connection error:", error);
     }

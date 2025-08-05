@@ -1,4 +1,4 @@
-export default interface IUser {
+export default interface IUser extends Document {
   _id: string;
   firstName: string;
   lastName: string;
