@@ -15,5 +15,6 @@ export function validateDto(dtoClass: any) {
 
       return res.status(400).json({ message: messages });
     }
+    next();
   };
 }

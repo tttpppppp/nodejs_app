@@ -3,11 +3,12 @@ import dotenv from "dotenv";
 import App from "./app";
 import { IndexRoute } from "@modules/index";
 import { validEnv } from "@core/utils";
+import AuthRoute from "./module/auth/auth.route";
 import UserRoute from "./module/users/user.route";
 
 dotenv.config();
 validEnv();
-const routes = [new IndexRoute(), new UserRoute()];
+const routes = [new IndexRoute(), new UserRoute(), new AuthRoute()];
 const app = new App(routes);
 
 app.listen();
