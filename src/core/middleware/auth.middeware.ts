@@ -2,7 +2,11 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { Logger } from "../utils";
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  if (req.path == "/user/create") {
+  if (
+    req.path == "/user/create" ||
+    req.path == "/auth/login" ||
+    req.path.startsWith("/api-docs")
+  ) {
     return next();
   }
   const token = req.header("authorization");

@@ -41,8 +41,9 @@ class UserController {
     next: NextFunction
   ) => {
     try {
-      const result = await this.userService.getAllUser();
-      Logger.info(result);
+      const pageNumber = parseInt(req.query.page as string) || 1;
+      const pageSize = parseInt(req.query.size as string) || 10;
+      const result = await this.userService.getAllUser(pageNumber, pageSize);
       return res.status(200).json({ message: "Get Successes!", result });
     } catch (error) {
       next(error);

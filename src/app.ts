@@ -7,6 +7,10 @@ import morgan from "morgan";
 import { Logger } from "@core/utils";
 import errorMiddleware from "./core/middleware/error.middeware";
 import authMiddleware from "./core/middleware/auth.middeware";
+import swaggerUi from "swagger-ui-express";
+import YAML from "yamljs";
+import fs from "fs";
+import { log } from "console";
 class App {
   public app: express.Application;
   public port: string | number;
@@ -17,9 +21,10 @@ class App {
     this.connectToDatabase();
     this.production = process.env.NODE_ENV === "production";
     this.initializeMiddlewares();
-    this.authMiddleware();
+    // this.authMiddleware();
     this.initializeRoutes(routes);
     this.initializeErrorHandling();
+    this.initSwagger();
   }
 
   private initializeRoutes(routes: Routes[]) {
@@ -72,6 +77,16 @@ class App {
     } catch (error) {
       Logger.error("Database connection error:", error);
     }
+  }
+  private initSwagger() {
+    const file = fs.readFileSync("./swagger.yaml", "utf8");
+    const swaggerDocument = YAML.parse(file);
+    Logger.info("Swagger initialized");
+    this.app.use(
+      "/api-docs",
+      swaggerUi.serve,
+      swaggerUi.setup(swaggerDocument)
+    );
   }
 }
 

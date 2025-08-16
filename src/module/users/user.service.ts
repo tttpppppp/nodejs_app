@@ -10,6 +10,7 @@ import jwt from "jsonwebtoken";
 import { log } from "winston";
 import { Logger } from "@/core/utils";
 import UpdateDto from "./dtos/update.dto";
+import IPagination from "@/core/interface/pagetion.interface";
 class UserService {
   private userSchema = UserSchema;
   public async createUser(userData: CreateUserDto): Promise<TokenData> {
@@ -87,10 +88,24 @@ class UserService {
       throw error;
     }
   };
-  public getAllUser = async (): Promise<IUser[]> => {
+  public getAllUser = async (
+    pageNumber: number,
+    pageSize: number
+  ): Promise<IPagination<IUser>> => {
     try {
-      const users = await this.userSchema.find().exec();
-      return users;
+      const users = await this.userSchema
+        .find()
+        .skip((pageNumber - 1) * pageSize)
+        .limit(pageSize)
+        .exec();
+      const totalUsers = await this.userSchema.countDocuments();
+      return {
+        items: users,
+        totalItems: totalUsers,
+        totalPages: Math.ceil(totalUsers / pageSize),
+        currentPage: pageNumber,
+        pageSize,
+      };
     } catch (error) {
       throw new HttpException(500, "Error retrieving users");
     }
