@@ -26,6 +26,8 @@ class UserRoute implements Routes {
       validateDto(UpdateDto),
       this.userController.updateUser
     );
+    this.router.delete("/delete", this.userController.deleteUser);
+    this.router.get("/all", this.userController.getAllUser);
   }
 }
 

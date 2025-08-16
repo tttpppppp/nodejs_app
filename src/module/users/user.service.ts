@@ -69,6 +69,32 @@ class UserService {
       throw error;
     }
   }
+  public deleteUser = async (id: string): Promise<IUser> => {
+    if (!id) {
+      throw new HttpException(400, "User ID cannot be empty");
+    }
+    const findUser = await this.userSchema.findById(id);
+    if (!findUser) {
+      throw new HttpException(404, "User does not exist");
+    }
+    try {
+      const deleteUser = await this.userSchema.findByIdAndDelete(id).exec();
+      if (!deleteUser) {
+        throw new HttpException(404, "User not found");
+      }
+      return deleteUser;
+    } catch (error) {
+      throw error;
+    }
+  };
+  public getAllUser = async (): Promise<IUser[]> => {
+    try {
+      const users = await this.userSchema.find().exec();
+      return users;
+    } catch (error) {
+      throw new HttpException(500, "Error retrieving users");
+    }
+  };
   public createToken = (user: IUser): TokenData => {
     const payload = { id: user._id, email: user.email };
     const privateKey = process.env.SECRET_KEY as string;

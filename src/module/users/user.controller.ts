@@ -35,6 +35,28 @@ class UserController {
       next(error);
     }
   };
+  public getAllUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const result = await this.userService.getAllUser();
+      Logger.info(result);
+      return res.status(200).json({ message: "Get Successes!", result });
+    } catch (error) {
+      next(error);
+    }
+  };
+  public deleteUser = (req: Request, res: Response, next: NextFunction) => {
+    const id = req.query.id as string;
+    try {
+      const result = this.userService.deleteUser(id);
+      return res.status(200).json({ message: "Delete Successes!", result });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default UserController;

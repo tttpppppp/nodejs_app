@@ -25,7 +25,6 @@ class LoginController {
     next: NextFunction
   ) => {
     const userid = (req as any).user.id;
-    Logger.info(`Fetching current user with ID: ${userid}`);
     try {
       const user = await this.userService.loginCurrent(userid);
       return res.status(200).json({ message: "Successes!", user });
