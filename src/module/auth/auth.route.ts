@@ -20,11 +20,7 @@ class AuthRoute implements Routes {
       validateDto(LoginUserDto),
       this.loginController.loginUser
     );
-    this.router.get(
-      "/login",
-      authMiddleware,
-      this.loginController.loginCurrentUser
-    );
+    this.router.get("/login", this.loginController.loginCurrentUser);
   }
 }
 

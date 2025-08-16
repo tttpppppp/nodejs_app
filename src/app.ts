@@ -6,6 +6,7 @@ import cors from "cors";
 import morgan from "morgan";
 import { Logger } from "@core/utils";
 import errorMiddleware from "./core/middleware/error.middeware";
+import authMiddleware from "./core/middleware/auth.middeware";
 class App {
   public app: express.Application;
   public port: string | number;
@@ -16,6 +17,7 @@ class App {
     this.connectToDatabase();
     this.production = process.env.NODE_ENV === "production";
     this.initializeMiddlewares();
+    this.authMiddleware();
     this.initializeRoutes(routes);
     this.initializeErrorHandling();
   }
@@ -45,6 +47,9 @@ class App {
 
   private initializeErrorHandling() {
     this.app.use(errorMiddleware);
+  }
+  private authMiddleware() {
+    this.app.use(authMiddleware);
   }
 
   public listen() {

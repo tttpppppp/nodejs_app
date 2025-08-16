@@ -15,9 +15,11 @@ class LoginService {
     if (isEmptyObject(userData)) {
       throw new HttpException(400, "User data cannot be empty");
     }
-    const findUser = await this.userSchema.findOne({
-      email: userData.email,
-    });
+    const findUser = await this.userSchema
+      .findOne({
+        email: userData.email,
+      })
+      .exec();
     if (!findUser) {
       throw new HttpException(409, "User does not exist");
     }

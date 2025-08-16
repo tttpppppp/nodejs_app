@@ -9,6 +9,7 @@ import IUser from "./user.interface";
 import jwt from "jsonwebtoken";
 import { log } from "winston";
 import { Logger } from "@/core/utils";
+import UpdateDto from "./dtos/update.dto";
 class UserService {
   private userSchema = UserSchema;
   public async createUser(userData: CreateUserDto): Promise<TokenData> {
@@ -35,6 +36,35 @@ class UserService {
         avatarUrl: url,
       });
       return this.createToken(createUser);
+    } catch (error) {
+      throw error;
+    }
+  }
+  public async updateUser(id: string, userData: UpdateDto): Promise<IUser> {
+    if (isEmptyObject(userData)) {
+      throw new HttpException(400, "User data cannot be empty");
+    }
+    const findUser = await this.userSchema.findById(id);
+    if (!findUser) {
+      throw new HttpException(404, "User does not exist");
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(userData.password, salt);
+    try {
+      const updateUser = await this.userSchema
+        .findByIdAndUpdate(
+          id,
+          {
+            ...userData,
+            password: hash,
+          },
+          { new: true }
+        )
+        .exec();
+      if (!updateUser) {
+        throw new HttpException(404, "User not found");
+      }
+      return updateUser;
     } catch (error) {
       throw error;
     }

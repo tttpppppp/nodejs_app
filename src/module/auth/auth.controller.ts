@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { TokenData } from "../auth";
 import LoginUserDto from "./auth.dto";
 import LoginService from "./auth.service";
+import { Logger } from "@/core/utils";
 
 class LoginController {
   private userService = new LoginService();
@@ -24,6 +25,7 @@ class LoginController {
     next: NextFunction
   ) => {
     const userid = (req as any).user.id;
+    Logger.info(`Fetching current user with ID: ${userid}`);
     try {
       const user = await this.userService.loginCurrent(userid);
       return res.status(200).json({ message: "Successes!", user });
