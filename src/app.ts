@@ -21,7 +21,7 @@ class App {
     this.connectToDatabase();
     this.production = process.env.NODE_ENV === "production";
     this.initializeMiddlewares();
-    // this.authMiddleware();
+    this.authMiddleware();
     this.initializeRoutes(routes);
     this.initializeErrorHandling();
     this.initSwagger();

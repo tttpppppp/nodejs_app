@@ -1,11 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { Logger } from "../utils";
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   if (
-    req.path == "/user/create" ||
-    req.path == "/auth/login" ||
-    req.path.startsWith("/api-docs")
+    (req.path == "/user/create" || req.path.startsWith("/api-docs"),
+    req.path.startsWith("/auth") && req.method === "POST")
   ) {
     return next();
   }

@@ -49,6 +49,14 @@ class UserService {
     if (!findUser) {
       throw new HttpException(404, "User does not exist");
     }
+    const checkEmailExists = await this.userSchema.find({
+      email: userData.email,
+      _id: { $ne: id },
+    });
+
+    if (checkEmailExists.length > 0) {
+      throw new HttpException(409, "Email already exists");
+    }
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(userData.password, salt);
     try {

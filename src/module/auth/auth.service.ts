@@ -33,7 +33,7 @@ class LoginService {
     if (!userId) {
       throw new HttpException(400, "User ID cannot be empty");
     }
-    const findUser = await this.userSchema.findById(userId);
+    const findUser = await this.userSchema.findById(userId).exec();
     if (!findUser) {
       throw new HttpException(404, "User not found");
     }
