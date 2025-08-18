@@ -14,6 +14,10 @@ class ProfileRoute implements Routes {
 
   private initializeRoutes() {
     this.router.post("/create", this.profileController.createProfile);
+    this.router.post(
+      "/create-experience",
+      this.profileController.createExperience
+    );
     this.router.get("/detail", this.profileController.getProfile);
   }
 }

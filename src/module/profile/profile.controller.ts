@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { ProfileService } from "./profile.service";
 import CreateProfileDto from "./dtos/ProfileDto";
+import { ExperienceDto } from "./dtos/ExperienceDto";
 
 export class ProfileController {
   private profileService = new ProfileService();
@@ -13,6 +14,26 @@ export class ProfileController {
     const profileData: CreateProfileDto = req.body;
     try {
       const profile = await this.profileService.createProfile(profileData);
+      return res
+        .status(201)
+        .json({ message: "Profile created successfully!", profile });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public createExperience = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const profileId = req.query.id as string;
+    const experienceData: ExperienceDto = req.body;
+    try {
+      const profile = await this.profileService.addExperience(
+        profileId,
+        experienceData
+      );
       return res
         .status(201)
         .json({ message: "Profile created successfully!", profile });
